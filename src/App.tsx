@@ -1,24 +1,48 @@
 import './App.css';
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 
 import { useFetch } from './fetch';
 
-type PostApi = {
-    age?: number;
-    count?: number;
-    name?: string;
-};
 export default function App() {
-    const res = useFetch('https://api.agify.io/?name=michael');
-    console.log(res.isLoading);
-    if (res.isLoading)
-        return <div className="flex flex-row bg-spotifyBlack">Loading...</div>;
+    const [isLoggedIn, setIsLoggedIn] = useState(
+        () => !!localStorage.getItem('accessToken'),
+    );
+    // Get config from .env file
+    const spotifyConfig = {
+        clientId: import.meta.env.VITE_APP_CLIENT_ID,
+        authorizationEndPoint: import.meta.env.VITE_APP_SPOTIFY_AUTHORIZATION_ENDPOINT,
+        redirectURL: import.meta.env.VITE_APP_REDIRECT_URL_AFTER_LOGIN,
+        appScopes: import.meta.env.VITE_APP_SCOPES.replace(',', '%20'),
+    };
+    const getReturnedValue = (hash: string) => {
+        const stringWithoutHashtag = hash.substring(1);
+        const paramsInUrl = stringWithoutHashtag.split('&');
+        return paramsInUrl.map((p) => p.split('=')[1]);
+    };
+    useEffect(() => {
+        if (window.location.hash) {
+            const utilsSpotify = getReturnedValue(window.location.hash);
+            localStorage.clear();
+            localStorage.setItem('accessToken', utilsSpotify[0]);
+            localStorage.setItem('tokenType', utilsSpotify[1]);
+            localStorage.setItem('expiresIn', utilsSpotify[2]);
+            setIsLoggedIn(true);
+        }
+    }, []);
+    if (isLoggedIn) return <Navigate replace to="/categories" />;
+    const handleLogin = () => {
+        window.location.href = `${spotifyConfig.authorizationEndPoint}?client_id=${spotifyConfig.clientId}&redirect_uri=${spotifyConfig.redirectURL}&scope=${spotifyConfig.appScopes}&response_type=token&show_dialog=true&exipres_in=3600`;
+    };
     return (
         <div className="flex flex-row bg-spotifyBlack">
             <div className="container grow divide-x">
                 <div className="grid place-items-center h-screen ">
-                    <button className="text-white flex hover:bg-spotifyGreen font-semibold hover:text-black py-2 px-5 border border-spotifyGreen hover:border-transparent rounded">
+                    <button
+                        onClick={handleLogin}
+                        className="text-white flex hover:bg-spotifyGreen font-semibold hover:text-black py-2 px-5 border border-spotifyGreen hover:border-transparent rounded"
+                    >
                         Connexion avec Spotify
                         <svg
                             className="fill-white ml-10 mt-[6px]"
