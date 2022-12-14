@@ -1,24 +1,65 @@
 import './App.css';
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {Navigate} from 'react-router-dom';
 
-import { useFetch } from './fetch';
+import {useFetch} from './fetch';
 
 type PostApi = {
     age?: number;
     count?: number;
     name?: string;
 };
+// https://developer.spotify.com/dashboard/oauth_callback#access_token=BQCuvFkSivW36TZ5JWFrEkN1f0kgCyWlWGbTzEYSHtUU7vw9MuCfQe1jzk_eQXvGB1l2A6721KOjduFMHVTiDwnS_mmGDsWZux8OATz1S8LCrmYDs6czKILTy5Cyu-oRD82eUmYJM1O-p3ptA4Q9htMLNgxDCsYJmSalgiE1-7p9rif1FdnWcl9PrhU&token_type=Bearer&expires_in=3600
 export default function App() {
-    const res = useFetch('https://api.agify.io/?name=michael');
-    console.log(res.isLoading);
+    const [isLoggedIn, setIsLoggedIn] = useState(
+        () => !!localStorage.getItem('accessToken'),
+    );
+    const spotifyConfig = {
+        clientId: import.meta.env.VITE_APP_CLIENT_ID,
+        authorizationEndPoint: import.meta.env.VITE_APP_SPOTIFY_AUTHORIZATION_ENDPOINT,
+        redirectURL: import.meta.env.VITE_APP_REDIRECT_URL_AFTER_LOGIN,
+        appScopes: import.meta.env.VITE_APP_SCOPES.replace(',', '%20'),
+    };
+    const getReturnedValue = (hash: string) => {
+        const stringAfterHashtag = hash.substring(1);
+        const paramsInUrl = stringAfterHashtag.split('&');
+        return paramsInUrl.reduce((accumulater: string, currentValue: string) => {
+            const [key, value] = currentValue.split('=');
+            accumulater[key] = value;
+            return accumulater;
+        }, {});
+    };
+    const res = useFetch('https://api.agify.io/?name=michael', {});
+    useEffect(() => {
+        if (window.location.hash) {
+            const { access_token, expires_in, token_type } = getReturnedValue(
+                window.location.hash,
+            );
+            localStorage.clear();
+            localStorage.setItem('accessToken', access_token);
+            localStorage.setItem('tokenType', token_type);
+            localStorage.setItem('expiresIn', expires_in);
+            setIsLoggedIn(true);
+            return () => {
+                setIsLoggedIn(false);
+            };
+        }
+    }, []);
+    if (isLoggedIn) return <Navigate replace to="/categories" />;
+    const handleLogin = () => {
+        window.location.href = `${spotifyConfig.authorizationEndPoint}?client_id=${spotifyConfig.clientId}&redirect_uri=${spotifyConfig.redirectURL}&scope=${spotifyConfig.appScopes}&response_type=token&show_dialog=true&exipres_in=3600`;
+    };
     if (res.isLoading)
         return <div className="flex flex-row bg-spotifyBlack">Loading...</div>;
     return (
         <div className="flex flex-row bg-spotifyBlack">
             <div className="container grow divide-x">
                 <div className="grid place-items-center h-screen ">
-                    <button className="text-white flex hover:bg-spotifyGreen font-semibold hover:text-black py-2 px-5 border border-spotifyGreen hover:border-transparent rounded">
+                    <button
+                        onClick={handleLogin}
+                        className="text-white flex hover:bg-spotifyGreen font-semibold hover:text-black py-2 px-5 border border-spotifyGreen hover:border-transparent rounded"
+                    >
                         Connexion avec Spotify
                         <svg
                             className="fill-white ml-10 mt-[6px]"
