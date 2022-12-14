@@ -1,17 +1,12 @@
 import { useEffect, useState } from 'react';
 
-type Options = {
-    method?: string;
-    headers?: Headers;
-};
-
 type FetchInfo = {
     data: string;
     isLoading?: boolean;
     error?: string | null;
 };
 
-export const useFetch = (url: string, options: Options): FetchInfo => {
+export const useFetch = (url: string, options: any): FetchInfo => {
     const [data, setData] = useState<string>('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
