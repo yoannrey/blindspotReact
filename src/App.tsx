@@ -19,11 +19,7 @@ export default function App() {
     const getReturnedValue = (hash: string) => {
         const stringWithoutHashtag = hash.substring(1);
         const paramsInUrl = stringWithoutHashtag.split('&');
-        const paramsFinal: Array<string> = [];
-        paramsInUrl.forEach((param) => {
-            paramsFinal.push(param.split('=')[1]);
-        });
-        return paramsFinal;
+        return paramsInUrl.map((p) => p.split('=')[1]);
     };
     useEffect(() => {
         if (window.location.hash) {
@@ -33,9 +29,6 @@ export default function App() {
             localStorage.setItem('tokenType', utilsSpotify[1]);
             localStorage.setItem('expiresIn', utilsSpotify[2]);
             setIsLoggedIn(true);
-            return () => {
-                setIsLoggedIn(false);
-            };
         }
     }, []);
     if (isLoggedIn) return <Navigate replace to="/categories" />;
