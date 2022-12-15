@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Navigate, Outlet, useNavigate} from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 import { useFetch } from '../fetch';
 
@@ -23,10 +23,12 @@ type Icon = {
     url: string;
 };
 export default function Categories() {
+    // Check if cache exist => if not return to login page
     const [isCacheEmpty, setIsCacheEmpty] = useState(
         () => !localStorage.getItem('accessToken'),
     );
     const navigate = useNavigate();
+    // Set options on fetch
     const { data, isLoading, error } = useFetch(
         'https://api.spotify.com/v1/browse/categories?limit=50',
         {
@@ -43,6 +45,7 @@ export default function Categories() {
     const navigateToCategory = (categoryId: string | undefined) => {
         navigate(`/categories/${categoryId}`);
     };
+    // TODO: Change this function for a disconnect one.
     const redirectToLogin = () => {
         localStorage.clear();
         setIsCacheEmpty(true);
@@ -58,9 +61,16 @@ export default function Categories() {
                     <h1 className="text-white font-semibold justify-center mb-10">
                         Catégories
                     </h1>
-                    <div className="grid grid-cols-4 place-items-center justify-center align-items">
+                    <div
+                        role="button"
+                        className="grid grid-cols-4 place-items-center justify-center align-items"
+                    >
                         {categories.items.map((item) => (
-                            <div key={item.id} className="card" onClick={() => navigateToCategory(item.id)}>
+                            <button
+                                key={item.id}
+                                className="card"
+                                onClick={() => navigateToCategory(item.id)}
+                            >
                                 <img
                                     className="w-[274px] h-[274px] hover:scale-105 rounded-md"
                                     src={item?.icons[0].url}
@@ -69,7 +79,7 @@ export default function Categories() {
                                 <p className="text-center" key={item.id}>
                                     {item.name}
                                 </p>
-                            </div>
+                            </button>
                         ))}
                     </div>
                 </div>
