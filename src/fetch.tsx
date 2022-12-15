@@ -1,30 +1,27 @@
 import { useEffect, useState } from 'react';
 
 type FetchInfo = {
-    data: string;
+    data: any;
     isLoading?: boolean;
     error?: string | null;
 };
 
 export const useFetch = (url: string, options: any): FetchInfo => {
-    const [data, setData] = useState<string>('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [data, setData] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
         const fetchData = async () => {
-            setIsLoading(true);
             try {
                 setError(null);
                 const res = await fetch(url, options);
+                if (res.status === 401) localStorage.clear();
                 const data = await res.json();
                 setData(data);
             } catch (e: any) {
                 setError(e);
-            } finally {
-                setIsLoading(false);
             }
         };
-        fetchData().then(() => console.log('OK'));
+        fetchData().then(() => console.log('Fetching data ok'));
     }, []);
-    return { data, isLoading, error };
+    return { data, isLoading: !data && !error, error };
 };
