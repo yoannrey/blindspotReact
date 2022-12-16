@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 
-type FetchInfo = {
-    data: any;
+type FetchInfo<T> = {
+    data: T | null;
     isLoading?: boolean;
     error?: string | null;
 };
 
-export const useFetch = (url: string, options: any): FetchInfo => {
-    const [data, setData] = useState<string | null>(null);
+export const useFetch = <T>(url: string, options: RequestInit): FetchInfo<T> => {
+    const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
         const fetchData = async () => {

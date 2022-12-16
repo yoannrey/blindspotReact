@@ -3,28 +3,19 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
+import { getParamsFromUrl, setLocalStorage } from './utils';
+
+// Get config from .env file & define Spotify config
+const spotifyConfig = {
+    clientId: import.meta.env.VITE_APP_CLIENT_ID,
+    authorizationEndPoint: import.meta.env.VITE_APP_SPOTIFY_AUTHORIZATION_ENDPOINT,
+    redirectURL: import.meta.env.VITE_APP_REDIRECT_URL_AFTER_LOGIN,
+    appScopes: import.meta.env.VITE_APP_SCOPES.replace(',', '%20'),
+};
 export default function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(
         () => !!localStorage.getItem('accessToken'),
     );
-    // Get config from .env file & define Spotify config
-    const spotifyConfig = {
-        clientId: import.meta.env.VITE_APP_CLIENT_ID,
-        authorizationEndPoint: import.meta.env.VITE_APP_SPOTIFY_AUTHORIZATION_ENDPOINT,
-        redirectURL: import.meta.env.VITE_APP_REDIRECT_URL_AFTER_LOGIN,
-        appScopes: import.meta.env.VITE_APP_SCOPES.replace(',', '%20'),
-    };
-    const getParamsFromUrl = (hash: string) => {
-        const stringWithoutHashtag = hash.substring(1);
-        const paramsInUrl = stringWithoutHashtag.split('&');
-        return paramsInUrl.map((p) => p.split('=')[1]);
-    };
-    const setLocalStorage = (utils: string[]) => {
-        localStorage.clear();
-        localStorage.setItem('accessToken', utils[0]);
-        localStorage.setItem('tokenType', utils[1]);
-        localStorage.setItem('expiresIn', utils[2]);
-    };
     // Set localStorage variables for reused them later. (@a.valente said to replace it by use
     useEffect(() => {
         if (window.location.hash) {

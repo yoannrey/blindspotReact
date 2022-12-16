@@ -2,10 +2,10 @@ import './index.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter, Outlet, Route, Routes} from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes} from 'react-router-dom';
 
 import App from './App';
-import Categories from './Categories/Categories';
+import Categories from './Categories';
 import Category from './Categories/Category';
 
 ReactDOM.render(
