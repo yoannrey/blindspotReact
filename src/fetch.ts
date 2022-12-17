@@ -6,6 +6,16 @@ type FetchInfo<T> = {
     error?: string | null;
 };
 
+const setAuthHeaders = () => {
+    const requestHeaders: HeadersInit = new Headers();
+    requestHeaders.set('Content-Type', 'application/json');
+    requestHeaders.set(
+        'Authorization',
+        `${localStorage.getItem('tokenType')} ${localStorage.getItem('accessToken')}`,
+    );
+    return requestHeaders;
+};
+
 export const useFetch = <T>(url: string, options: RequestInit): FetchInfo<T> => {
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -13,6 +23,7 @@ export const useFetch = <T>(url: string, options: RequestInit): FetchInfo<T> => 
         const fetchData = async () => {
             try {
                 setError(null);
+                options.headers = setAuthHeaders();
                 const res = await fetch(url, options);
                 if (res.status === 401) localStorage.clear();
                 const data = await res.json();

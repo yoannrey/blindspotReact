@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 import { useFetch } from '../fetch';
 
-type Index = {
+type Categories = {
     categories: {
         href: string;
         items: Item[];
@@ -24,15 +24,7 @@ type Icon = {
     width: string | null;
     url: string;
 };
-
-const requestHeaders: HeadersInit = new Headers();
-requestHeaders.set('Content-Type', 'application/json');
-requestHeaders.set(
-    'Authorization',
-    `${localStorage.getItem('tokenType')} ${localStorage.getItem('accessToken')}`,
-);
-
-export default function Categories() {
+const Categories: FC = () => {
     // Check if cache exist => if not return to login page
     const [isCacheEmpty, setIsCacheEmpty] = useState(
         () => !localStorage.getItem('accessToken'),
@@ -44,11 +36,10 @@ export default function Categories() {
         data: data,
         isLoading,
         error,
-    } = useFetch<Index>(
+    } = useFetch<Categories>(
         `${import.meta.env.VITE_APP_API_URL}/browse/categories?limit=50`,
         {
             method: 'GET',
-            headers: requestHeaders,
         },
     );
     const navigateToCategory = (categoryId: string | undefined) => {
@@ -101,4 +92,6 @@ export default function Categories() {
             <Outlet />
         </div>
     );
-}
+};
+
+export default Categories;
