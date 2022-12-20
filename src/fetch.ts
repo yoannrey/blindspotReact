@@ -6,7 +6,7 @@ type FetchInfo<T> = {
     error?: string | null;
 };
 
-const setAuthHeaders = () => {
+const getAuthHeaders = () => {
     const requestHeaders: HeadersInit = new Headers();
     requestHeaders.set('Content-Type', 'application/json');
     requestHeaders.set(
