@@ -23,7 +23,7 @@ export const useFetch = <T>(url: string, options: RequestInit): FetchInfo<T> => 
         const fetchData = async () => {
             try {
                 setError(null);
-                options.headers = setAuthHeaders();
+                options.headers = getAuthHeaders();
                 const res = await fetch(url, options);
                 if (res.status === 401) localStorage.clear();
                 const data = await res.json();
