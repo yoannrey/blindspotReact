@@ -1,6 +1,7 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
+import { useIsCacheEmpty } from '../cache';
 import { useFetch } from '../fetch';
 
 type Categories = {
@@ -26,9 +27,7 @@ type Icon = {
 };
 const Categories: FC = () => {
     // Check if cache exist => if not return to login page
-    const [isCacheEmpty, setIsCacheEmpty] = useState(
-        () => !localStorage.getItem('accessToken'),
-    );
+    const clearCacheAndRedirect = useIsCacheEmpty();
     const navigate = useNavigate();
 
     // Set options on fetch
@@ -46,11 +45,7 @@ const Categories: FC = () => {
         navigate(`/categories/${categoryId}`);
     };
     // TODO: Change this function for a disconnect one.
-    const redirectToLogin = () => {
-        localStorage.clear();
-        setIsCacheEmpty(true);
-    };
-    if (isCacheEmpty || error) return <Navigate replace to="/login" />;
+    if (error) return <Navigate replace to="/login" />;
     if (isLoading) return <p>Loading...</p>;
     const categories = data?.categories;
     // Retrieve some Spotify categories using API
@@ -85,7 +80,7 @@ const Categories: FC = () => {
             </div>
             <button
                 className="text-black flex hover:bg-spotifyGreen font-semibold py-2 px-5 border border-spotifyGreen hover:border-transparent rounded"
-                onClick={redirectToLogin}
+                onClick={clearCacheAndRedirect}
             >
                 Empty Cache
             </button>
