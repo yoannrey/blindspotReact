@@ -18,7 +18,7 @@ const Carousel: FC = () => {
                 {options.map((option, index) => (
                     <div
                         key={option}
-                        className={`relative block w-full leading-5 text-center font-medium text-white transition duration-150 ease-in-out ${
+                        className={`relative block w-full leading-5 text-center text-3xl font-medium text-white transition duration-150 ease-in-out ${
                             selectedIndex === index ? '' : 'hidden'
                         } flex items-center justify-center`}
                     >
@@ -26,18 +26,44 @@ const Carousel: FC = () => {
                     </div>
                 ))}
             </div>
-            <div className="relative inset-x-0 bottom-0 flex justify-between px-2 py-3">
+            <div className="relative inset-x-0 bottom-8 flex justify-between px-[35em] py-3">
                 <button
-                    className="text-sm font-medium leading-5 transition duration-150 ease-in-out"
+                    className="text-md font-medium leading-5 transition duration-150 ease-in-out"
                     onClick={handlePrevious}
                 >
-                    Précédent
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15.75 19.5L8.25 12l7.5-7.5"
+                        />
+                    </svg>
                 </button>
                 <button
-                    className="text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none focus:underline"
+                    className="text-md font-medium leading-5 transition duration-150 ease-in-out"
                     onClick={handleNext}
                 >
-                    Suivant
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                        />
+                    </svg>
                 </button>
             </div>
         </div>
