@@ -1,35 +1,56 @@
 import { FC, useState } from 'react';
-
+import { CSSTransition } from 'react-transition-group';
 const Carousel: FC = () => {
     const options = ['Facile', 'Moyen', 'Difficile'];
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [selectedIndex, setSelectedIndex] = useState<number>(0);
+    const [prevIndex, setPrevIndex] = useState<number | null>(null);
+
 
     const handlePrevious = () => {
+        setPrevIndex(selectedIndex);
         setSelectedIndex(selectedIndex === 0 ? options.length - 1 : selectedIndex - 1);
     };
 
     const handleNext = () => {
+        setPrevIndex(selectedIndex);
         setSelectedIndex(selectedIndex === options.length - 1 ? 0 : selectedIndex + 1);
+        console.log(selectedIndex);
     };
 
     return (
         <div className="relative overflow-hidden">
             <div className="relative">
                 {options.map((option, index) => (
-                    <div
-                        key={option}
-                        className={`relative block w-full leading-5 text-center text-3xl font-medium text-white transition duration-150 ease-in-out ${
-                            selectedIndex === index ? '' : 'hidden'
-                        } flex items-center justify-center`}
+                    <CSSTransition
+                        id={index}
+                        key={index}
+                        in={selectedIndex === index}
+                        timeout={300}
+                        classNames={
+                            prevIndex === index + 1
+                                ? 'slide-prev'
+                                : prevIndex === index - 1
+                                ? 'slide-next'
+                                : 'slide-current'
+                        }
+                        unmountOnExit
                     >
-                        {option}
-                    </div>
+                        <div
+                            key={option}
+                            className={`relative block leading-5 text-center text-3xl text-white ${
+                                selectedIndex === index ? 'selected' : 'hidden'
+                            } flex items-center justify-center`}
+                        >
+                            {option}
+                        </div>
+                    </CSSTransition>
                 ))}
             </div>
             <div className="relative inset-x-0 bottom-8 flex justify-between px-[35em] py-3">
                 <button
                     className="text-md font-medium leading-5 transition duration-150 ease-in-out"
                     onClick={handlePrevious}
+                    disabled={selectedIndex === 0}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +58,7 @@ const Carousel: FC = () => {
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="w-6 h-6"
+                        className="w-6 h-6 hover:scale-150"
                     >
                         <path
                             strokeLinecap="round"
@@ -49,6 +70,7 @@ const Carousel: FC = () => {
                 <button
                     className="text-md font-medium leading-5 transition duration-150 ease-in-out"
                     onClick={handleNext}
+                    disabled={selectedIndex === 2}
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -56,7 +78,7 @@ const Carousel: FC = () => {
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="w-6 h-6"
+                        className="w-6 h-6 hover:scale-150"
                     >
                         <path
                             strokeLinecap="round"

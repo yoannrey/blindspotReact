@@ -10,6 +10,50 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+/* Define the animation for the slide enter transition */
+.slide-prev-enter {
+  transform: translateX(-20%);
+}
+.slide-prev-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms ease-in-out;
+}
+.slide-next-enter {
+  transform: translateX(20%);
+}
+.slide-next-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms ease-in-out;
+}
+
+.slide-prev-exit {
+  transform: translateX(0);
+}
+
+.slide-prev-exit-active {
+  transform: translateX(-20%);
+  transition: transform 300ms ease-in-out;
+}
+
+.slide-next-exit {
+  transform: translateX(0);
+}
+
+.slide-next-exit-active {
+  transform: translateX(20%);
+  transition: transform 300ms ease-in-out;
+}
+
+.slide-current-exit{
+  transform: translateX(0);
+}
+
+.slide-current-exit-active {
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
