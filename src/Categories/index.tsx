@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
+import { Icon } from '../../resources/types/icon';
 import { useIsCacheEmpty } from '../cache';
 import { useFetch } from '../fetch';
 
@@ -20,11 +21,6 @@ type Item = {
     icons: Icon[];
 };
 
-type Icon = {
-    height: string | null;
-    width: string | null;
-    url: string;
-};
 const Categories: FC = () => {
     // Check if cache exist => if not return to login page
     const clearCacheAndRedirect = useIsCacheEmpty();
