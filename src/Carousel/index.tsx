@@ -1,20 +1,24 @@
 import { FC, useState } from 'react';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { CSSTransition } from 'react-transition-group';
+
+import { classNames } from '../../resources/utils/classNames';
 const Carousel: FC = () => {
     const options = ['Facile', 'Moyen', 'Difficile'];
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [prevIndex, setPrevIndex] = useState<number | null>(null);
 
-
+    // Previous button
     const handlePrevious = () => {
         setPrevIndex(selectedIndex);
         setSelectedIndex(selectedIndex === 0 ? options.length - 1 : selectedIndex - 1);
     };
 
+    // Next button
     const handleNext = () => {
         setPrevIndex(selectedIndex);
         setSelectedIndex(selectedIndex === options.length - 1 ? 0 : selectedIndex + 1);
-        console.log(selectedIndex);
     };
 
     return (
@@ -37,9 +41,10 @@ const Carousel: FC = () => {
                     >
                         <div
                             key={option}
-                            className={`relative block leading-5 text-center text-3xl text-white ${
-                                selectedIndex === index ? 'selected' : 'hidden'
-                            } flex items-center justify-center`}
+                            className={classNames(
+                                'relative block leading-5 text-center text-4xl text-white flex items-center justify-center',
+                                selectedIndex === index ? 'selected' : 'hidden',
+                            )}
                         >
                             {option}
                         </div>

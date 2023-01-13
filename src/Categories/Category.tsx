@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { CategoryType } from '../../resources/types/category';
-import Carousel from '../Carousel';
-import { useFetch } from '../fetch';
+import { useFetch } from '../../resources/utils/fetch';
+import Carousel from '../Carousel/index';
 
 const Category: FC = () => {
     const params = useParams();
@@ -17,7 +17,6 @@ const Category: FC = () => {
     });
     if (isLoading) return <div>Loading</div>;
     if (error) return <div>error</div>;
-    console.log(category?.name);
     return (
         <div className="bg-spotifyBlack text-white h-screen">
             <div className="flex flex-col items-center  py-8">

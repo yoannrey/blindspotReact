@@ -3,7 +3,7 @@ import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 import { Icon } from '../../resources/types/icon';
 import { useIsCacheEmpty } from '../cache';
-import { useFetch } from '../fetch';
+import { useFetch } from '../../resources/utils/fetch';
 
 type Categories = {
     categories: {

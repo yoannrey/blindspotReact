@@ -3,7 +3,8 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { getParamsFromUrl, setLocalStorage } from './utils';
+import { setLocalStorage } from '../resources/utils/localStorageHandler';
+import { getParamsFromUrl } from '../resources/utils/params';
 
 // Get config from .env file & define Spotify config
 const spotifyConfig = {
