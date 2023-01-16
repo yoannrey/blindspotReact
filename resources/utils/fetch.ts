@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { ACCESS_TOKEN_PATH } from './accessToken';
+import { ACCESS_TOKEN_PATH } from './localStorageHandler';
 
 const url = import.meta.env.VITE_APP_API_URL;
 const options: RequestInit = {
@@ -18,7 +18,7 @@ const getAuthHeaders = () => {
     requestHeaders.set('Content-Type', 'application/json');
     requestHeaders.set(
         'Authorization',
-        `${localStorage.getItem('tokenType')} ${ACCESS_TOKEN_PATH}`,
+        `${localStorage.getItem('tokenType')} ${localStorage.getItem(ACCESS_TOKEN_PATH)}`,
     );
     return requestHeaders;
 };
@@ -36,8 +36,8 @@ export const useFetch = <T>(pathApi: string): FetchInfo<T> => {
                 if (res.status === 401) localStorage.clear();
                 const data = await res.json();
                 setData(data);
-            } catch (e: any) {
-                setError(e);
+            } catch (e: unknown) {
+                if (e instanceof Error) setError(e.message);
             }
         };
         fetchData().then(() => console.log('Fetching data ok'));

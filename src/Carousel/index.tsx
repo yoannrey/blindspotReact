@@ -7,10 +7,10 @@ import { classNames } from '../../resources/utils/classNames';
 
 type CategoryParam = {
     categoryId: string | undefined;
+    options: string[];
 };
 
-const options = ['Facile', 'Moyen', 'Difficile'];
-const Carousel: FC<CategoryParam> = ({ categoryId }) => {
+const Carousel: FC<CategoryParam> = ({ categoryId, options }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [prevIndex, setPrevIndex] = useState<number | null>(null);
     const navigate = useNavigate();
@@ -20,6 +20,7 @@ const Carousel: FC<CategoryParam> = ({ categoryId }) => {
         setPrevIndex(selectedIndex);
         setSelectedIndex(selectedIndex === 0 ? options.length - 1 : selectedIndex - 1);
     };
+
 
     // Next button
     const handleNext = () => {
