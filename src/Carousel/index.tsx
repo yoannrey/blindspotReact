@@ -1,13 +1,19 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import { FC, useState } from 'react';
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+import { useNavigate } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import { classNames } from '../../resources/utils/classNames';
-const Carousel: FC = () => {
-    const options = ['Facile', 'Moyen', 'Difficile'];
-    const [selectedIndex, setSelectedIndex] = useState<number>(0);
+
+type CategoryParam = {
+    categoryId: string | undefined;
+};
+
+const options = ['Facile', 'Moyen', 'Difficile'];
+const Carousel: FC<CategoryParam> = ({ categoryId }) => {
+    const [selectedIndex, setSelectedIndex] = useState(0);
     const [prevIndex, setPrevIndex] = useState<number | null>(null);
+    const navigate = useNavigate();
 
     // Previous button
     const handlePrevious = () => {
@@ -21,12 +27,20 @@ const Carousel: FC = () => {
         setSelectedIndex(selectedIndex === options.length - 1 ? 0 : selectedIndex + 1);
     };
 
+    // Start button logic
+    const startTheGame = () => {
+        // TODO: Need to send to Game component Difficulty (selectedIndex) & category (already have it)
+        const gameInfos = {
+            categoryId: categoryId,
+            difficulty: selectedIndex,
+        };
+    };
+
     return (
         <div className="relative overflow-hidden">
             <div className="relative">
                 {options.map((option, index) => (
                     <CSSTransition
-                        id={index}
                         key={index}
                         in={selectedIndex === index}
                         timeout={300}
@@ -53,44 +67,18 @@ const Carousel: FC = () => {
             </div>
             <div className="relative inset-x-0 bottom-8 flex justify-between px-[35em] py-3">
                 <button
-                    className="text-md font-medium leading-5 transition duration-150 ease-in-out"
+                    className="text-md font-medium leading-5 hover:scale-150 transition duration-150 ease-in-out"
                     onClick={handlePrevious}
                     disabled={selectedIndex === 0}
                 >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6 hover:scale-150"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15.75 19.5L8.25 12l7.5-7.5"
-                        />
-                    </svg>
+                    <ChevronLeftIcon className="h-6 w-6 text-white" />
                 </button>
                 <button
-                    className="text-md font-medium leading-5 transition duration-150 ease-in-out"
+                    className="text-md font-medium leading-5 transition duration-150 hover:scale-150 ease-in-out"
                     onClick={handleNext}
                     disabled={selectedIndex === 2}
                 >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6 hover:scale-150"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                        />
-                    </svg>
+                    <ChevronRightIcon className="h-6 w-6 text-white" />
                 </button>
             </div>
         </div>

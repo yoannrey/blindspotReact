@@ -3,6 +3,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
+import { ACCESS_TOKEN_PATH } from '../resources/utils/accessToken';
 import { setLocalStorage } from '../resources/utils/localStorageHandler';
 import { getParamsFromUrl } from '../resources/utils/params';
 
@@ -14,9 +15,7 @@ const spotifyConfig = {
     appScopes: import.meta.env.VITE_APP_SCOPES.replace(',', '%20'),
 };
 export default function App() {
-    const [isLoggedIn, setIsLoggedIn] = useState(
-        () => !!localStorage.getItem('accessToken'),
-    );
+    const [isLoggedIn, setIsLoggedIn] = useState(() => !!ACCESS_TOKEN_PATH);
     // Set localStorage variables for reused them later. (@a.valente said to replace it by use
     useEffect(() => {
         if (window.location.hash) {

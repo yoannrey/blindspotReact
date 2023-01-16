@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
 
+import { ACCESS_TOKEN_PATH } from './accessToken';
+
+const url = import.meta.env.VITE_APP_API_URL;
+const options: RequestInit = {
+    method: 'GET',
+};
+
 type FetchInfo<T> = {
     data: T | null;
     isLoading?: boolean;
@@ -11,12 +18,12 @@ const getAuthHeaders = () => {
     requestHeaders.set('Content-Type', 'application/json');
     requestHeaders.set(
         'Authorization',
-        `${localStorage.getItem('tokenType')} ${localStorage.getItem('accessToken')}`,
+        `${localStorage.getItem('tokenType')} ${ACCESS_TOKEN_PATH}`,
     );
     return requestHeaders;
 };
 
-export const useFetch = <T>(url: string, options: RequestInit): FetchInfo<T> => {
+export const useFetch = <T>(pathApi: string): FetchInfo<T> => {
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
@@ -24,7 +31,8 @@ export const useFetch = <T>(url: string, options: RequestInit): FetchInfo<T> => 
             try {
                 setError(null);
                 options.headers = getAuthHeaders();
-                const res = await fetch(url, options);
+                const res = await fetch(url + pathApi, options);
+                console.log(url + pathApi);
                 if (res.status === 401) localStorage.clear();
                 const data = await res.json();
                 setData(data);

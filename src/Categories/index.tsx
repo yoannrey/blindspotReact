@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 
 import { Icon } from '../../resources/types/icon';
-import { useIsCacheEmpty } from '../cache';
+import { useIsCacheEmpty } from '../../resources/utils/cache';
 import { useFetch } from '../../resources/utils/fetch';
 
 type Categories = {
@@ -31,12 +31,7 @@ const Categories: FC = () => {
         data: data,
         isLoading,
         error,
-    } = useFetch<Categories>(
-        `${import.meta.env.VITE_APP_API_URL}/browse/categories?limit=50`,
-        {
-            method: 'GET',
-        },
-    );
+    } = useFetch<Categories>('/browse/categories?limit=50');
     const navigateToCategory = (categoryId: string | undefined) => {
         navigate(`/categories/${categoryId}`);
     };
