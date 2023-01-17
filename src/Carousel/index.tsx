@@ -1,40 +1,26 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import { FC, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 
 import { classNames } from '../../resources/utils/classNames';
 
 type CategoryParam = {
-    categoryId: string | undefined;
     options: string[];
 };
 
-const Carousel: FC<CategoryParam> = ({ categoryId, options }) => {
+const Carousel: FC<CategoryParam> = ({ options }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [prevIndex, setPrevIndex] = useState<number | null>(null);
-    const navigate = useNavigate();
 
     // Previous button
     const handlePrevious = () => {
         setPrevIndex(selectedIndex);
         setSelectedIndex(selectedIndex === 0 ? options.length - 1 : selectedIndex - 1);
     };
-
-
     // Next button
     const handleNext = () => {
         setPrevIndex(selectedIndex);
         setSelectedIndex(selectedIndex === options.length - 1 ? 0 : selectedIndex + 1);
-    };
-
-    // Start button logic
-    const startTheGame = () => {
-        // TODO: Need to send to Game component Difficulty (selectedIndex) & category (already have it)
-        const gameInfos = {
-            categoryId: categoryId,
-            difficulty: selectedIndex,
-        };
     };
 
     return (

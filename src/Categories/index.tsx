@@ -4,6 +4,7 @@ import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { Icon } from '../../resources/types/icon';
 import { useIsCacheEmpty } from '../../resources/utils/cache';
 import { useFetch } from '../../resources/utils/fetch';
+import Navbar from "../Navbar";
 
 type Categories = {
     categories: {
@@ -42,10 +43,8 @@ const Categories: FC = () => {
     // Retrieve some Spotify categories using API
     return (
         <div className="bg-spotifyBlack text-white">
+            <Navbar backTo="/login" />
             <div className="container mx-auto">
-                <h1 className="text-white font-semibold justify-center mb-10">
-                    Catégories
-                </h1>
                 <div
                     role="button"
                     className="grid grid-cols-4 place-items-center justify-center align-items"
