@@ -6,23 +6,32 @@ import { classNames } from '../../resources/utils/classNames';
 
 type CategoryParam = {
     options: string[];
+    chooseDifficulty: (option: number) => void;
 };
 
-const Carousel: FC<CategoryParam> = ({ options }) => {
+const Carousel: FC<CategoryParam> = ({ options, chooseDifficulty }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [prevIndex, setPrevIndex] = useState<number | null>(null);
 
     // Previous button
     const handlePrevious = () => {
+        if (selectedIndex > 0) handleOptionChange(selectedIndex - 1);
         setPrevIndex(selectedIndex);
-        setSelectedIndex(selectedIndex === 0 ? options.length - 1 : selectedIndex - 1);
+        // setSelectedIndex(selectedIndex === 0 ? options.length - 1 : selectedIndex - 1);
     };
     // Next button
     const handleNext = () => {
+        if (selectedIndex < options.length - 1) handleOptionChange(selectedIndex + 1);
         setPrevIndex(selectedIndex);
-        setSelectedIndex(selectedIndex === options.length - 1 ? 0 : selectedIndex + 1);
+        // setPrevIndex(selectedIndex);
+        // setSelectedIndex(selectedIndex === options.length - 1 ? 0 : selectedIndex + 1);
+        // handleOptionChange(selectedIndex);
     };
 
+    const handleOptionChange = (index: number) => {
+        setSelectedIndex(index);
+        chooseDifficulty(index);
+    };
     return (
         <div className="relative overflow-hidden">
             <div className="relative">
@@ -43,7 +52,7 @@ const Carousel: FC<CategoryParam> = ({ options }) => {
                         <div
                             key={option}
                             className={classNames(
-                                'relative block leading-5 text-center text-4xl text-white flex items-center justify-center',
+                                'relative block leading-5 text-center text-3xl text-white flex items-center justify-center',
                                 selectedIndex === index ? 'selected' : 'hidden',
                             )}
                         >

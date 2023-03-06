@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 import { Icon } from '../../resources/types/icon';
 import { useIsCacheEmpty } from '../../resources/utils/cache';
 import { useFetch } from '../../resources/utils/fetch';
-import Navbar from "../Navbar";
+import Navbar from '../Navbar';
 
 type Categories = {
     categories: {
@@ -25,7 +25,6 @@ type Item = {
 const Categories: FC = () => {
     // Check if cache exist => if not return to login page
     const clearCacheAndRedirect = useIsCacheEmpty();
-    const navigate = useNavigate();
 
     // Set options on fetch
     const {
@@ -33,9 +32,6 @@ const Categories: FC = () => {
         isLoading,
         error,
     } = useFetch<Categories>('/browse/categories?limit=50');
-    const navigateToCategory = (categoryId: string | undefined) => {
-        navigate(`/categories/${categoryId}`);
-    };
     // TODO: Change this function for a disconnect one.
     if (error) return <Navigate replace to="/login" />;
     if (isLoading) return <p>Loading...</p>;
@@ -51,10 +47,10 @@ const Categories: FC = () => {
                 >
                     {categories &&
                         categories.items.map((item) => (
-                            <button
+                            <a
                                 key={item.id}
                                 className="card"
-                                onClick={() => navigateToCategory(item.id)}
+                                href={`/categories/${item.id}`}
                             >
                                 <img
                                     className="w-[274px] h-[274px] hover:scale-105 rounded-md"
@@ -64,7 +60,7 @@ const Categories: FC = () => {
                                 <p className="text-center" key={item.id}>
                                     {item.name}
                                 </p>
-                            </button>
+                            </a>
                         ))}
                 </div>
             </div>
