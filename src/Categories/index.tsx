@@ -1,10 +1,14 @@
 import { FC } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Link, Navigate, Outlet } from 'react-router-dom';
 
 import { Icon } from '../../resources/types/icon';
 import { useIsCacheEmpty } from '../../resources/utils/cache';
 import { useFetch } from '../../resources/utils/fetch';
 import Navbar from '../Navbar';
+
+const routes = {
+    category: (categoryId: string | undefined) => `/categories/${categoryId}`,
+};
 
 type Categories = {
     categories: {
@@ -47,10 +51,10 @@ const Categories: FC = () => {
                 >
                     {categories &&
                         categories.items.map((item) => (
-                            <a
+                            <Link
                                 key={item.id}
                                 className="card"
-                                href={`/categories/${item.id}`}
+                                to={routes.category(item.id)}
                             >
                                 <img
                                     className="w-[274px] h-[274px] hover:scale-105 rounded-md"
@@ -60,7 +64,7 @@ const Categories: FC = () => {
                                 <p className="text-center" key={item.id}>
                                     {item.name}
                                 </p>
-                            </a>
+                            </Link>
                         ))}
                 </div>
             </div>

@@ -8,9 +8,14 @@ import Carousel from '../Carousel/index';
 import Navbar from '../Navbar';
 
 const options: string[] = ['Facile', 'Moyen', 'Difficile'];
+const routes = {
+    play: (categoryId: string | undefined, difficulty: number) =>
+        `/categories/${categoryId}/play?difficulty=${difficulty}`,
+};
+
 const Category: FC = () => {
     const params = useParams();
-    const [difficulty, setDifficulty] = useState<number>(0);
+    const [difficulty, setDifficulty] = useState(0);
     const {
         data: category,
         isLoading,
@@ -18,10 +23,6 @@ const Category: FC = () => {
     } = useFetch<CategoryType>(`/browse/categories/${params.categoryId}`);
     if (isLoading) return <div>Loading</div>;
     if (error) return <div>Error</div>;
-    const chooseDifficulty = (difficulty: number) => {
-        setDifficulty(difficulty);
-    };
-
     return (
         <div className="bg-spotifyBlack text-white h-screen">
             <Navbar backTo="/categories" />
@@ -31,10 +32,10 @@ const Category: FC = () => {
                     <h1 className="text-center text-3xl py-4">{category?.name}</h1>
                 </div>
             </div>
-            <Carousel options={options} chooseDifficulty={chooseDifficulty} />
+            <Carousel options={options} setValue={setDifficulty} />
             <div className="flex flex-col items-center py-12">
                 <Link
-                    to={`/categories/${params.categoryId}/play?difficulty=${difficulty}`}
+                    to={routes.play(params.categoryId, difficulty)}
                     className="text-white flex flex-col hover:scale-102 transition-colors hover:bg-spotifyGreen font-semibold hover:text-black py-2 px-5 items-center hover:border-transparent rounded w-1/6"
                 >
                     <PlayIcon className="h-8 w-10" />

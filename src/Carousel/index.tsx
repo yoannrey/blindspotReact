@@ -6,10 +6,10 @@ import { classNames } from '../../resources/utils/classNames';
 
 type CategoryParam = {
     options: string[];
-    chooseDifficulty: (option: number) => void;
+    setValue: (value: number) => void;
 };
 
-const Carousel: FC<CategoryParam> = ({ options, chooseDifficulty }) => {
+const Carousel: FC<CategoryParam> = ({ options, setValue }) => {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [prevIndex, setPrevIndex] = useState<number | null>(null);
 
@@ -17,20 +17,16 @@ const Carousel: FC<CategoryParam> = ({ options, chooseDifficulty }) => {
     const handlePrevious = () => {
         if (selectedIndex > 0) handleOptionChange(selectedIndex - 1);
         setPrevIndex(selectedIndex);
-        // setSelectedIndex(selectedIndex === 0 ? options.length - 1 : selectedIndex - 1);
     };
     // Next button
     const handleNext = () => {
         if (selectedIndex < options.length - 1) handleOptionChange(selectedIndex + 1);
         setPrevIndex(selectedIndex);
-        // setPrevIndex(selectedIndex);
-        // setSelectedIndex(selectedIndex === options.length - 1 ? 0 : selectedIndex + 1);
-        // handleOptionChange(selectedIndex);
     };
 
     const handleOptionChange = (index: number) => {
         setSelectedIndex(index);
-        chooseDifficulty(index);
+        setValue(index);
     };
     return (
         <div className="relative overflow-hidden">
