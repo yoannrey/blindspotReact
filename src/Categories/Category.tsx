@@ -32,7 +32,7 @@ const Category: FC = () => {
                     <h1 className="text-center text-3xl py-4">{category?.name}</h1>
                 </div>
             </div>
-            <Carousel options={options} setValue={setDifficulty} />
+            <Carousel options={options} value={difficulty} setValue={setDifficulty} />
             <div className="flex flex-col items-center py-12">
                 <Link
                     to={routes.play(params.categoryId, difficulty)}
