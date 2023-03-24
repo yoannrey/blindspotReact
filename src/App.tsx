@@ -3,9 +3,14 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { getParamsFromUrl, setLocalStorage } from './utils';
+import {
+    ACCESS_TOKEN_PATH,
+    setLocalStorage,
+} from '../resources/utils/localStorageHandler';
+import { getParamsFromUrl } from '../resources/utils/params';
 
 // Get config from .env file & define Spotify config
+
 const spotifyConfig = {
     clientId: import.meta.env.VITE_APP_CLIENT_ID,
     authorizationEndPoint: import.meta.env.VITE_APP_SPOTIFY_AUTHORIZATION_ENDPOINT,
@@ -14,9 +19,9 @@ const spotifyConfig = {
 };
 export default function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(
-        () => !!localStorage.getItem('accessToken'),
+        () => !!localStorage.getItem(ACCESS_TOKEN_PATH),
     );
-    // Set localStorage variables for reused them later. (@a.valente said to replace it by use
+    // Set localStorage variables for reused them later.
     useEffect(() => {
         if (window.location.hash) {
             const utilsSpotify = getParamsFromUrl(window.location.hash);
